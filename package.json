@@ -1,0 +1,41 @@
+{
+  "name": "api-with-postgresql",
+  "version": "1.0.0",
+  "description": "Creating an API with PostgreSQL and Expres project, full stack javascript developer, udacity",
+  "main": "server.ts",
+  "scripts": {
+    "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
+    "jasmine": "jasmine",
+    "build": "npx tsc",
+    "test": "ENV=test && npx tsc && db-migrate db:create full_stack_test && db-migrate --env test up && jasmine && db-migrate db:drop full_stack_test",
+    "test1": "jasmine-ts",
+    "tsc": "tsc",
+    "start": "nodemon src/server.ts"
+  },
+  "author": "daddy2054",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/jasmine": "^4.3.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/pg": "^8.6.5",
+    "body-parser": "^1.20.0",
+    "db-migrate": "^0.11.13",
+    "db-migrate-pg": "^1.2.2",
+    "jasmine": "^4.4.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "jasmine-ts": "^0.4.0",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.8.2"
+  }
+}

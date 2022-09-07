@@ -1,0 +1,19 @@
+{
+    "dev": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "full_stack",
+      "user": "postgres",
+      "password": "mysecretpassword",
+      "port": "5432"
+    },
+    "test": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "full_stack_test",
+      "user": "postgres",
+      "password": "mysecretpassword",
+      "port": "5432"
+    },
+    "sql-file" : true
+  }
