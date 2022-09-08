@@ -1,5 +1,6 @@
 create TABLE products (
     id serial primary key,
     name varchar not null,
-    price INT not null default 0
+    price INT not null default 0,
+    category varchar
 );

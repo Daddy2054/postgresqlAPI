@@ -3,6 +3,7 @@ CREATE TABLE users (
     first_name varchar,
     last_name varchar,
     username varchar,
-    password varchar
+    password varchar,
+    admin boolean
 );
 

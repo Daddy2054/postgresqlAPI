@@ -1,7 +1,7 @@
-import * as dotenv from "dotenv";
+//import * as dotenv from "dotenv";
 import { Pool } from "pg";
 
-dotenv.config();
+//dotenv.config();
 
 const {
   POSTGRES_HOST,
@@ -15,9 +15,9 @@ const {
   TOKEN_SECRET
 } = process.env;
 
-export const saltRounds = SALT_ROUNDS
-export const pepper =   BCRYPT_PEPPER
-export const token_secret = TOKEN_SECRET
+//export const saltRounds = SALT_ROUNDS
+//export const pepper =   BCRYPT_PEPPER
+//export const token_secret = TOKEN_SECRET
 
 let client: Pool;
 console.log(ENV);
