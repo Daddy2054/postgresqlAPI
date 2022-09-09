@@ -35,13 +35,29 @@ const add = async (req: Request, res: Response) => {
     product_id: req.body.product_id,
   };
   try {
-    const create = await store.create(order);
+    const create = await store.addProduct(order, order_products);
     res.json(create);
   } catch (err) {
     res.status(400);
     res.json(err);
   }
 };
+
+const completed = async (req: Request, res: Response) => {
+  const order: Order = {
+    id: "",
+    status: "",
+    user_id: req.body.user_id,
+  };
+  try {
+    const completed = await store.completed(order);
+    res.json(completed);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
 const update = async (req: Request, res: Response) => {
   const order_products: OrderProducts = {
     quantity: 1,
@@ -66,4 +82,4 @@ const remove = async (req: Request, res: Response) => {
     res.json(err);
   }
 };
-export { index, add, show, update, remove };
+export { index, add, show, update, remove, completed };

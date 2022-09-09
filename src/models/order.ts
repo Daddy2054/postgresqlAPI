@@ -83,6 +83,19 @@ export class OrderStore {
     }
   }
 
+  async completed(order: Order): Promise<Order> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "SELECT * FROM Orders WHERE user_id=($1) AND status=('completed')";
+      const result = await conn.query(sql, [order.user_id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Could not find orders. Error: ${err}`);
+    }
+  }
+
   async create(order: Order): Promise<Order> {
     try {
       const conn = await client.connect();
