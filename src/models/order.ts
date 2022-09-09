@@ -36,6 +36,20 @@ export class OrderStore {
     }
   }
 
+  // select Current Order by user (args: user id)[token required]
+  async showCurrent(user_id: string): Promise<Order> {
+    try {
+      const sql = "SELECT * FROM Orders WHERE user_id=($1)";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [user_id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(
+        `Could not get current order for user ID:${user_id}. Error: ${err}`
+      );
+    }
+  }
   async addProduct(
     order: Order,
     order_products: OrderProducts

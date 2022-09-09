@@ -15,10 +15,9 @@ export class UserStore {
     try {
       const sql =
         "INSERT INTO users (first_name,last_name,username,password) VALUES($1, $2,$3,$4) RETURNING *";
-      //  console.log(u.username,u.password)
       const conn = await client.connect();
       const hash = bcrypt.hashSync(
-        u.password + process.env.BCRYPT_PEPPER,
+        (u.password + process.env.BCRYPT_PEPPER) as string,
         parseInt(process.env.SALT_ROUNDS as string)
       );
       const result = await conn.query(sql, [u.username, hash]);
@@ -33,11 +32,14 @@ export class UserStore {
     const conn = await client.connect();
     const sql = "SELECT username,password FROM users WHERE username=($1)";
     const result = await conn.query(sql, [username]);
-   // console.log(password + pepper);
     if (result.rows.length) {
       const user = result.rows[0];
-    //  console.log(user);
-      if (bcrypt.compareSync(password + process.env.BCRYPT_PEPPER, user.password)) {
+      if (
+        bcrypt.compareSync(
+          (password + process.env.BCRYPT_PEPPER) as string,
+          user.password
+        )
+      ) {
         return user;
       }
     }

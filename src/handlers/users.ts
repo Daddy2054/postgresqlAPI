@@ -13,12 +13,12 @@ const register = async (req: Request, res: Response) => {
     password: req.body.password,
     admin: req.body.admin,
   };
-  //  console.log(user.username,user.password)
+
   try {
-    const alreadyUser = await store.show(user.username);
+    const alreadyUser: User = await store.show(user.username as string);
     if (!alreadyUser) {
-      const newUser = await store.create(user);
-      const token = generateAuthToken(newUser);
+      const newUser: User = await store.create(user as User);
+      const token = generateAuthToken(newUser as User) as string | undefined;
       res.json(token);
     } else {
       throw new Error("This username is not available.");
@@ -39,9 +39,12 @@ const auth = async (req: Request, res: Response) => {
     admin: req.body.admin,
   };
   try {
-    const authUser = await store.login(user.username, user.password);
+    const authUser: User | null = await store.login(
+      user.username,
+      user.password
+    );
     if (authUser) {
-      const token = generateAuthToken(authUser);
+      const token = generateAuthToken(authUser as User) as string | undefined;
       res.json(token);
     } else {
       return null;
@@ -54,7 +57,7 @@ const auth = async (req: Request, res: Response) => {
 
 const index = async (req: Request, res: Response) => {
   try {
-    const index = await store.index();
+    const index: User[] = await store.index();
     res.json(index);
   } catch (err) {
     res.status(400);
@@ -64,7 +67,7 @@ const index = async (req: Request, res: Response) => {
 
 const get = async (req: Request, res: Response) => {
   try {
-    const show = await store.show(req.params["id"]);
+    const show: User = await store.show(req.params["id"]);
     res.json(show);
   } catch (err) {
     res.status(400);

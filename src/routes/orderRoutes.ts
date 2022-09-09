@@ -8,6 +8,7 @@ import {
   show,
   remove,
   completed,
+  current,
 } from "../handlers/orders";
 
 const router = express.Router();
@@ -19,5 +20,5 @@ router
   .get(verifyAuthToken, administrator, index);
 router.route("/:id").get(verifyAuthToken, show).delete(verifyAuthToken, remove);
 router.route("/completed").get(verifyAuthToken, completed);
-
+router.route("/current/:id").get(verifyAuthToken, current);
 export default router;

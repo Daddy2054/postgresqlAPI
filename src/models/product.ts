@@ -29,7 +29,18 @@ export class ProductStore {
       throw new Error(`Could not get Product ${id}. Error: ${err}`);
     }
   }
-
+  // select * from products by category;
+  async productsByCategory(category: string): Promise<Product[]> {
+    try {
+      const conn = await client.connect();
+      const sql = "SELECT * FROM products WHERE category=($1);";
+      const result = await conn.query(sql, [category]);
+      conn.release();
+      return result.rows;
+    } catch (err) {
+      throw new Error(`unable get products by category: ${err}`);
+    }
+  }
   async create(product: Product): Promise<Product> {
     try {
       const sql =
