@@ -1,11 +1,5 @@
-import express, { Request, Response } from "express";
-
-import { DashboardQueries } from "../utilities/dashboard";
-
-const dashboardRoutes = (app: express.Application) => {
-  app.get("/products_in_orders", productsInOrders);
-  app.get("/five_most_expensive_products", fiveMostExpensiveProducts);
-};
+import { Request, Response } from "express";
+import { DashboardQueries } from "../services/dashboard";
 
 const dashboard = new DashboardQueries();
 
@@ -14,7 +8,7 @@ const productsInOrders = async (_req: Request, res: Response) => {
   res.json(products);
 };
 const fiveMostExpensiveProducts = async (_req: Request, res: Response) => {
-    const products = await dashboard.fiveMostExpensiveProducts();
-    res.json(products);
-  };
-export default dashboardRoutes;
+  const products = await dashboard.fiveMostExpensiveProducts();
+  res.json(products);
+};
+export { productsInOrders, fiveMostExpensiveProducts };

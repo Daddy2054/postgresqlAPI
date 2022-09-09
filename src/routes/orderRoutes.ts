@@ -1,12 +1,15 @@
 import express from "express";
 import administrator from "../middleware/admin";
 import verifyAuthToken from "../middleware/verify_token";
-import { create, index, auth, get } from "../handlers/orders";
+import { add, index, update, show, remove } from "../handlers/orders";
 
 const router = express.Router();
 
-router.route("/").post(verifyAuthToken,create).get(verifyAuthToken, administrator, index);
-router.post("/login", auth);
-router.get("/:id", get);
+router
+  .route("/")
+  .post(verifyAuthToken, add)
+  .put(verifyAuthToken, update)
+  .get(verifyAuthToken, administrator, index);
+router.route("/:id").get(verifyAuthToken, show).delete(verifyAuthToken, remove);
 
 export default router;

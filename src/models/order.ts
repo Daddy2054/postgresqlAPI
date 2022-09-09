@@ -24,7 +24,6 @@ export class OrderStore {
     }
   }
 
-
   async show(id: string): Promise<Order> {
     try {
       const sql = "SELECT * FROM Orders WHERE id=($1)";
@@ -37,15 +36,12 @@ export class OrderStore {
     }
   }
 
-  async addProduct(order_products: OrderProducts): Promise<OrderProducts> {
+  async addProduct(
+    order: Order,
+    order_products: OrderProducts
+  ): Promise<OrderProducts> {
     try {
-/* if not exist open order from current user 
-(decode token and take user_id)
-      create new order
-      add product to that order
-
-      */
-
+      this.create(order as Order);
       const sql =
         "INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2,$3) RETURNING *";
       const conn = await client.connect();
@@ -62,29 +58,40 @@ export class OrderStore {
       );
     }
   }
-  async deleteProduct(order_products: OrderProducts): Promise<OrderProducts> {
+  async updateProduct(order_products: OrderProducts): Promise<OrderProducts> {
     try {
-      const sql =
-        "DELETE FROM order_products WHERE order_id=($1) AND product_id=($2) RETURNING *; ";
+      let sql;
+      if (order_products.quantity === 0) {
+        sql =
+          "DELETE FROM order_products WHERE order_id=($1) AND product_id=($2) RETURNING *; ";
+      } else {
+        sql =
+          "update order_products SET quantity =($3)  WHERE order_id=($1) AND product_id=($2) RETURNING *; ";
+      }
       const conn = await client.connect();
       const result = await conn.query(sql, [
         order_products.order_id,
         order_products.product_id,
+        order_products.quantity,
       ]);
       conn.release();
       return result.rows[0];
     } catch (err) {
       throw new Error(
-        `Could not delete product ${order_products.product_id} to order ${order_products.order_id}.  ${err}`
+        `Could not update product ${order_products.product_id} in order ${order_products.order_id}.  ${err}`
       );
     }
   }
 
   async create(order: Order): Promise<Order> {
     try {
-      const sql = "INSERT INTO orders (status) VALUES($1) RETURNING *";
       const conn = await client.connect();
-      const result = await conn.query(sql, [order.status]);
+      const sql = "SELECT * FROM Orders WHERE user_id=($1) AND status=('open')";
+      let result = await conn.query(sql, [order.user_id]);
+      if (!result.rows[0]) {
+        const sql = "INSERT INTO orders (status) VALUES('open') RETURNING *";
+        result = await conn.query(sql);
+      }
       conn.release();
       return result.rows[0];
     } catch (err) {
@@ -103,5 +110,4 @@ export class OrderStore {
       throw new Error(`Could not delete Order ${id}. Error: ${err}`);
     }
   }
-
 }

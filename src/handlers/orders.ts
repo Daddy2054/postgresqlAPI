@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Order, OrderStore } from "../models/order";
+import { Order, OrderProducts, OrderStore } from "../models/order";
 
 const store = new OrderStore();
 
@@ -13,7 +13,7 @@ const index = async (req: Request, res: Response) => {
   }
 };
 
-OrdersRoutes.get("/:id", async (req: Request, res: Response) => {
+const show = async (req: Request, res: Response) => {
   try {
     const show = await store.show(req.params["id"]);
     res.json(show);
@@ -21,37 +21,49 @@ OrdersRoutes.get("/:id", async (req: Request, res: Response) => {
     res.status(400);
     res.json(err);
   }
-});
+};
 
-const create =async (req: Request, res: Response) => {
-    const order: Order = {
-      id: req.body.id,
-      status: req.body.status,
-      content: req.body.content,
-    };
-    try {
-      const create = await store.create(order);
-      res.json(create);
-    } catch (err) {
-      res.status(400);
-      res.json(err);
-    }
+const add = async (req: Request, res: Response) => {
+  const order: Order = {
+    id: "",
+    status: "",
+    user_id: req.body.user_id,
+  };
+  const order_products: OrderProducts = {
+    quantity: req.body.quantity,
+    order_id: "",
+    product_id: req.body.product_id,
+  };
+  try {
+    const create = await store.create(order);
+    res.json(create);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-
-
-
-OrdersRoutes.delete(
-  "/:id",
-  verifyAuthToken,
-  async (req: Request, res: Response) => {
-    try {
-      const del = await store.delete(req.params["id"]);
-      res.json(del);
-    } catch (err) {
-      res.status(400);
-      res.json(err);
-    }
+};
+const update = async (req: Request, res: Response) => {
+  const order_products: OrderProducts = {
+    quantity: 1,
+    order_id: req.body.order_id,
+    product_id: req.body.product_id,
+  };
+  try {
+    const update = await store.updateProduct(order_products);
+    res.json(update);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-);
+};
 
-export {index,create}
+const remove = async (req: Request, res: Response) => {
+  try {
+    const del = await store.delete(req.params["id"]);
+    res.json(del);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+export { index, add, show, update, remove };
