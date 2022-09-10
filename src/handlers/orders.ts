@@ -60,7 +60,7 @@ const completed = async (req: Request, res: Response) => {
     user_id: req.body.user_id,
   };
   try {
-    const completed: Order = await store.completed(order);
+    const completed: Order = await store.completedByUser(order);
     res.json(completed);
   } catch (err) {
     res.status(400);

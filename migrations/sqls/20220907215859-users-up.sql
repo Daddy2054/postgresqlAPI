@@ -4,6 +4,6 @@ CREATE TABLE users (
     last_name varchar,
     username varchar,
     password varchar,
-    admin boolean
+    admin boolean not null default false
 );
 

@@ -6,12 +6,12 @@ const store = new UserStore();
 
 const register = async (req: Request, res: Response) => {
   const user: User = {
-    id: req.body.id,
+    id: "",
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     username: req.body.username,
     password: req.body.password,
-    admin: req.body.admin,
+    admin: false,
   };
 
   try {
@@ -74,4 +74,15 @@ const get = async (req: Request, res: Response) => {
     res.json(err);
   }
 };
-export { register, index, auth, get };
+
+const admin = async (req: Request, res: Response) => {
+  try {
+    const admin: User = await store.makeAdmin(req.params["id"]);
+    res.json(admin);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
+export { register, index, auth, get, admin };

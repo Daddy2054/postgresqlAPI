@@ -4,67 +4,116 @@ export type Product = {
   id: string;
   name: string;
   price: number;
+  category: string;
 };
 export class ProductStore {
   async index(): Promise<Product[]> {
     try {
+      const sql =
+        " \
+      SELECT \
+        * \
+      FROM \
+        Products \
+      ";
       const conn = await client.connect();
-      const sql = "SELECT * FROM Products";
       const result = await conn.query(sql);
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error(`Could not get Products. Error: ${err}`);
+      throw new Error(`Could not get products list. Error: ${err}`);
     }
   }
 
   async show(id: string): Promise<Product> {
     try {
-      const sql = "SELECT * FROM Products WHERE id=($1)";
+      const sql =
+        "\
+        SELECT \
+          * \
+        FROM \
+          products \
+        WHERE \
+          id = ($1) \
+        ";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not get Product ${id}. Error: ${err}`);
+      throw new Error(`Could not get product ${id}. Error: ${err}`);
     }
   }
+
   // select * from products by category;
   async productsByCategory(category: string): Promise<Product[]> {
     try {
+      const sql =
+        "\
+      SELECT \
+        * \
+      FROM \
+        products \
+      WHERE \
+        category = ($1) \
+      ";
       const conn = await client.connect();
-      const sql = "SELECT * FROM products WHERE category=($1);";
       const result = await conn.query(sql, [category]);
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error(`unable get products by category: ${err}`);
+      throw new Error(`Unable get products by category: ${err}`);
     }
   }
+
   async create(product: Product): Promise<Product> {
     try {
       const sql =
-        "INSERT INTO products (name, price) VALUES($1, $2) RETURNING *";
+        "\
+      SELECT \
+        * \
+      FROM \
+        products \
+      WHERE \
+        name = ($1) \
+      AND \
+        price = ($2) \
+      ";
+      const values = [product.name, product.price]
       const conn = await client.connect();
-      //console.log(product)
-      const result = await conn.query(sql, [product.name, product.price]);
+      let result = await conn.query(sql, values);
+      if (!result.rows[0]) {
+        const sql =
+          "\
+        INSERT INTO \
+          products (name, price) \
+        VALUES ($1, $2) \
+        RETURNING * \
+        ";
+        result = await conn.query(sql,values);
+      }
       conn.release();
-      //console.log(result)
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not add Product ${product.name}. Error: ${err}`);
+      throw new Error(`Could not add product ${product.name}. Error: ${err}`);
     }
   }
 
   async delete(id: string): Promise<Product> {
     try {
-      const sql = "DELETE FROM Products WHERE id=($1)";
+      const sql =
+        "\
+      DELETE FROM \
+        products \
+      WHERE id = ($1) \
+        RETURNING * \
+      ";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);
       conn.release();
-      return  result.rows[0];
+      return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not delete Product ${id}. Error: ${err}`);
+      throw new Error(`Could not delete product ${id}. Error: ${err}`);
     }
   }
 }

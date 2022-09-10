@@ -8,6 +8,7 @@
     "jasmine": "jasmine",
     "build": "npx tsc",
     "test": "ENV=test && npx tsc && db-migrate db:create full_stack_test && db-migrate --env test up && jasmine && db-migrate db:drop full_stack_test",
+    "test-up": "ENV=test && npx tsc && db-migrate db:create full_stack_test && db-migrate --env test up && jasmine ",
     "test1": "jasmine-ts",
     "tsc": "tsc",
     "start": "nodemon src/server.ts"
@@ -32,7 +33,6 @@
     "db-migrate-pg": "^1.2.2",
     "jasmine": "^4.4.0",
     "jasmine-spec-reporter": "^7.0.0",
-    "jasmine-ts": "^0.4.0",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
     "tsc-watch": "^5.0.3",
