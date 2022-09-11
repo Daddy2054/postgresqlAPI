@@ -5,17 +5,19 @@ import { User, UserStore } from "../models/user";
 const store = new UserStore();
 
 const register = async (req: Request, res: Response) => {
+  console.log('register method start')
   const user: User = {
-    id: "",
+    id: 1,
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     username: req.body.username,
     password: req.body.password,
     admin: false,
   };
-
+console.log(user)
   try {
     const alreadyUser: User = await store.show(user.username as string);
+    console.log(alreadyUser)
     if (!alreadyUser) {
       const newUser: User = await store.create(user as User);
       const token = generateAuthToken(newUser as User) as string | undefined;

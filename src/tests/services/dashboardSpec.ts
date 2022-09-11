@@ -3,22 +3,24 @@ import { Product, ProductStore } from "../../models/product";
 import { DashboardQueries } from "../../services/dashboard";
 
 const product: Product = {
-  id: "1",
+  id: 1,
   name: "product_name",
   price: 0,
   category: "category_name",
 };
 const products: Product[] = [product];
+
 const order: Order = {
-  id: "1",
+  id: 1,
   status: "open",
-  user_id: "1",
+  user_id: 1,
 };
 const order_products: OrderProducts = {
   quantity: 1,
-  order_id: "1",
-  product_id: "1",
+  order_id: 1,
+  product_id: 1,
 };
+
 const store = new OrderStore();
 const PrStore = new ProductStore();
 const dashboard = new DashboardQueries();

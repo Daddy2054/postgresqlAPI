@@ -2,7 +2,7 @@ import { Order, OrderProducts, OrderStore } from "../../models/order";
 import { Product } from "../../models/product";
 
 const product: Product = {
-  id: "1",
+  id: 1,
   name: "product_name",
   price: 0,
   category: "category_name",
@@ -10,15 +10,15 @@ const product: Product = {
 
 const store = new OrderStore();
 const order: Order = {
-  id: "1",
+  id: 1,
   status: "open",
-  user_id: "1",
+  user_id: 1,
 };
 const orders: Order[] = [order];
 const order_products: OrderProducts = {
   quantity: 1,
-  order_id: "1",
-  product_id: "1",
+  order_id: 1,
+  product_id: 1,
 };
 
 describe("Order model testing suite", () => {

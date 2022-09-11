@@ -15,7 +15,9 @@ const index = async (req: Request, res: Response) => {
 
 const show = async (req: Request, res: Response) => {
   try {
-    const show: Product = await store.show(req.params["id"]);
+    const show: Product = await store.show(
+      parseInt(req.params["id"]) as number
+    );
     res.json(show);
   } catch (err) {
     res.status(400);
@@ -26,7 +28,7 @@ const show = async (req: Request, res: Response) => {
 const category = async (req: Request, res: Response) => {
   try {
     const category: Product[] = await store.productsByCategory(
-      req.params["id"]
+      req.params["category"]
     );
     res.json(category);
   } catch (err) {
@@ -52,7 +54,9 @@ const create = async (req: Request, res: Response) => {
 };
 const remove = async (req: Request, res: Response) => {
   try {
-    const del: Product = await store.delete(req.params["id"]);
+    const del: Product = await store.delete(
+      parseInt(req.params["id"]) as number
+    );
     res.json(del);
   } catch (err) {
     res.status(400);

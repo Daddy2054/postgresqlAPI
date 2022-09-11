@@ -1,7 +1,7 @@
-//import * as dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import { Pool } from "pg";
 
-//dotenv.config();
+dotenv.config();
 
 const {
   POSTGRES_HOST,
@@ -12,17 +12,39 @@ const {
   ENV,
   BCRYPT_PEPPER,
   SALT_ROUNDS,
-  TOKEN_SECRET
+  TOKEN_SECRET,
 } = process.env;
 
-//export const saltRounds = SALT_ROUNDS
-//export const pepper =   BCRYPT_PEPPER
-//export const token_secret = TOKEN_SECRET
-
 let client: Pool;
-console.log(ENV);
-
-if (ENV === "dev") {
+if (ENV) {
+  console.log(ENV);
+  if (ENV === "dev") {
+    client = new Pool({
+      host: POSTGRES_HOST,
+      database: POSTGRES_DB,
+      user: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+    });
+  }
+  if (ENV === "test") {
+    client = new Pool({
+      host: POSTGRES_HOST,
+      database: POSTGRES_TEST_DB,
+      user: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+    });
+  }
+} else {
+  console.log(
+    "host " +
+      POSTGRES_HOST +
+      " database:" +
+      POSTGRES_DB +
+      " user:" +
+      POSTGRES_USER +
+      " password:" +
+      POSTGRES_PASSWORD
+  );
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_DB,
@@ -31,13 +53,5 @@ if (ENV === "dev") {
   });
 }
 
-if (ENV === "test") {
-  client = new Pool({
-    host: POSTGRES_HOST,
-    database: POSTGRES_TEST_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD,
-  });
-}
 //@ts-ignore
 export default client;

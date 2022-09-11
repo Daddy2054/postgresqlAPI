@@ -8,7 +8,7 @@ export class DashboardQueries {
       const sql =
         " \
       SELECT \
-        * \
+        products.id, products.name, products.price, products.category \
       FROM products \
         INNER JOIN \
       order_products \
@@ -27,8 +27,8 @@ export class DashboardQueries {
   // select * from products order by price desc limit 5;
   async fiveMostExpensiveProducts(): Promise<Product[]> {
     try {
-      const sql = 
-      " \
+      const sql =
+        " \
         SELECT \
       * \
         FROM \

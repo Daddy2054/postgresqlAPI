@@ -2,14 +2,14 @@ import client from "../data/database";
 import { Product, ProductStore } from "./product";
 
 export type Order = {
-  id: string;
+  id: number;
   status: string;
-  user_id: string;
+  user_id: number;
 };
 export type OrderProducts = {
   quantity: number;
-  order_id: string;
-  product_id: string;
+  order_id: number;
+  product_id: number;
 };
 
 export class OrderStore {
@@ -32,7 +32,7 @@ export class OrderStore {
     }
   }
 
-  async show(id: string): Promise<Order> {
+  async show(id: number): Promise<Order> {
     try {
       const sql =
         "\
@@ -53,7 +53,7 @@ export class OrderStore {
   }
 
   // select Current Order by user (args: user id)[token required]
-  async showCurrent(user_id: string): Promise<Order> {
+  async showCurrent(user_id: number): Promise<Order> {
     try {
       const sql = "SELECT * FROM Orders WHERE user_id=($1)";
       const conn = await client.connect();
@@ -137,7 +137,7 @@ export class OrderStore {
     }
   }
 
-  async completedByUser(user_id: string): Promise<Order[]> {
+  async completedByUser(user_id: number): Promise<Order[]> {
     try {
       const sql =
         " \
@@ -192,7 +192,7 @@ export class OrderStore {
     }
   }
 
-  async delete(id: string): Promise<Order> {
+  async delete(id: number): Promise<Order> {
     try {
       const sql =
         "\

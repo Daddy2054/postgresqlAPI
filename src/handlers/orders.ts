@@ -16,7 +16,7 @@ const index = async (req: Request, res: Response) => {
 
 const show = async (req: Request, res: Response) => {
   try {
-    const show: Order = await store.show(req.params["id"]);
+    const show: Order = await store.show(parseInt(req.params["id"]));
     res.json(show);
   } catch (err) {
     res.status(400);
@@ -26,7 +26,7 @@ const show = async (req: Request, res: Response) => {
 
 const current = async (req: Request, res: Response) => {
   try {
-    const current: Order = await store.showCurrent(req.params["id"]);
+    const current: Order = await store.showCurrent(parseInt(req.params["id"]));
     res.json(current);
   } catch (err) {
     res.status(400);
@@ -62,7 +62,7 @@ const add = async (req: Request, res: Response) => {
 
 const completed = async (req: Request, res: Response) => {
   const order: Order = {
-    id: "",
+    id: 0,
     status: "",
     user_id: req.body.user_id,
   };
@@ -92,7 +92,7 @@ const update = async (req: Request, res: Response) => {
 
 const remove = async (req: Request, res: Response) => {
   try {
-    const del: Order = await store.delete(req.params["id"]);
+    const del: Order = await store.delete(parseInt(req.params["id"]));
     res.json(del);
   } catch (err) {
     res.status(400);

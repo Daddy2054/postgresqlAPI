@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
 import client from "../data/database";
+import { crypt_hash, crypt_compare } from "../utilities/crypt";
 
 export type User = {
-  id: string;
+  id: number;
   first_name: string;
   last_name: string;
   username: string;
@@ -12,6 +12,7 @@ export type User = {
 
 export class UserStore {
   async create(u: User): Promise<User> {
+    console.log("create method start");
     try {
       const sql =
         "INSERT INTO users (first_name, last_name, username, PASSWORD) \
@@ -19,10 +20,7 @@ export class UserStore {
       RETURNING \
       *;";
 
-      const hash = bcrypt.hashSync(
-        (u.password + process.env.BCRYPT_PEPPER) as string,
-        parseInt(process.env.SALT_ROUNDS as string)
-      );
+      const hash = crypt_hash(u.password);
       const values = [u.first_name, u.last_name, u.username, hash];
       const conn = await client.connect();
       const result = await conn.query(sql, values);
@@ -35,9 +33,9 @@ export class UserStore {
 
   async login(username: string, password: string): Promise<User | null> {
     const sql =
-      "SELECT \
-    username, \
-    PASSWORD \
+      "\
+      SELECT \
+      * \
       FROM \
     users \
       WHERE \
@@ -48,12 +46,7 @@ export class UserStore {
     conn.release();
     if (result.rows.length) {
       const user = result.rows[0];
-      if (
-        bcrypt.compareSync(
-          (password + process.env.BCRYPT_PEPPER) as string,
-          user.password
-        )
-      ) {
+      if (crypt_compare(password as string, user.password as string)) {
         return user;
       }
     }
@@ -61,6 +54,7 @@ export class UserStore {
   }
 
   async show(username: string): Promise<User> {
+    console.log("show method start");
     try {
       const sql =
         "SELECT \
@@ -72,6 +66,7 @@ export class UserStore {
   ";
       const conn = await client.connect();
       const result = await conn.query(sql, [username]);
+      console.log("result:" + result);
       conn.release();
       return result.rows[0];
     } catch (err) {
