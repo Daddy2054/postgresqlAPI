@@ -13,6 +13,7 @@ export type OrderProducts = {
 };
 
 export class OrderStore {
+
   async index(): Promise<Order[]> {
     try {
       const sql =
@@ -71,9 +72,9 @@ export class OrderStore {
     order_products: OrderProducts,
     product: Product
   ): Promise<OrderProducts> {
-    const newOrder = await this.create(order as Order);
-    const productStore = new ProductStore();
-    const newProduct = await productStore.create(product as Product);
+    const newOrder: Order = await this.create(order as Order);
+    const productStore: ProductStore = new ProductStore();
+    const newProduct: Product = await productStore.create(product as Product);
     try {
       const sql =
         " \
@@ -100,10 +101,26 @@ export class OrderStore {
       let sql;
       if (order_products.quantity === 0) {
         sql =
-          "DELETE FROM order_products WHERE order_id=($1) AND product_id=($2) RETURNING *; ";
+          " \
+          DELETE FROM \
+            order_products \
+          WHERE \
+            order_id=($1) \
+          AND \
+            product_id=($2) \
+          RETURNING *; ";
       } else {
         sql =
-          "update order_products SET quantity =($3)  WHERE order_id=($1) AND product_id=($2) RETURNING *; ";
+          "\
+          UPDATE \
+            order_products \
+          SET \
+            quantity =($3) \
+          WHERE \
+            order_id=($1) \
+          AND \
+            product_id=($2) \
+          RETURNING *; ";
       }
       const conn = await client.connect();
       const result = await conn.query(sql, [
@@ -136,7 +153,7 @@ export class OrderStore {
       const conn = await client.connect();
       const result = await conn.query(sql, [user_id]);
       conn.release();
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error(
         `Could not find orders, completed by userID ${user_id}. Error: ${err}`
@@ -161,10 +178,10 @@ export class OrderStore {
       if (!result.rows[0]) {
         const sql =
           "\
-        INSERT INTO orders (status) \
-          VALUES ('open') \
-        RETURNING \
-          * \
+        INSERT INTO \
+          orders (status) \
+        VALUES ('open') \
+          RETURNING * \
         ";
         result = await conn.query(sql);
       }
@@ -183,8 +200,7 @@ export class OrderStore {
         orders \
       WHERE \
         id=($1) \
-      RETURNING \
-        * \
+      RETURNING * \
       ";
       const conn = await client.connect();
       const result = await conn.query(sql, [id]);

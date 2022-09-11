@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Order, OrderProducts, OrderStore } from "../models/order";
+import { Product } from "../models/product";
 
 const store = new OrderStore();
 
@@ -35,18 +36,24 @@ const current = async (req: Request, res: Response) => {
 
 const add = async (req: Request, res: Response) => {
   const order: Order = {
-    id: "",
-    status: "",
-    user_id: req.body.user_id,
+    id: req.body.order.order_id,
+    status: req.body.order.status,
+    user_id: req.body.order.user_id,
   };
   const order_products: OrderProducts = {
-    quantity: req.body.quantity,
-    order_id: "",
-    product_id: req.body.product_id,
+    quantity: req.body.order_products.quantity,
+    order_id: req.body.order_products.order_id,
+    product_id: req.body.order_products.product_id,
   };
+  const product: Product = {
+    id: req.body.product.id,
+    name: req.body.product.name,
+    price: req.body.product.price,
+    category: req.body.product.category
+  }
   try {
-    const create: OrderProducts = await store.addProduct(order, order_products);
-    res.json(create);
+    const add: OrderProducts = await store.addProduct(order, order_products,product);
+    res.json(add);
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -60,7 +67,7 @@ const completed = async (req: Request, res: Response) => {
     user_id: req.body.user_id,
   };
   try {
-    const completed: Order = await store.completedByUser(order);
+    const completed: Order[] = await store.completedByUser(order.user_id);
     res.json(completed);
   } catch (err) {
     res.status(400);
@@ -70,7 +77,7 @@ const completed = async (req: Request, res: Response) => {
 
 const update = async (req: Request, res: Response) => {
   const order_products: OrderProducts = {
-    quantity: 1,
+    quantity: req.body.quantity,
     order_id: req.body.order_id,
     product_id: req.body.product_id,
   };

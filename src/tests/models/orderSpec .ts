@@ -17,8 +17,8 @@ const order: Order = {
 const orders: Order[] = [order];
 const order_products: OrderProducts = {
   quantity: 1,
-  order_id: "",
-  product_id: "",
+  order_id: "1",
+  product_id: "1",
 };
 
 describe("Order model testing suite", () => {
@@ -54,26 +54,26 @@ describe("Order model testing suite", () => {
     expect(result).toEqual(orders);
   });
 
-  it("should have a delete method", () => {
-    expect(store.delete).toBeDefined();
-  });
-  it("delete method should delete the correct order", async () => {
-    const result = await store.delete(order.id);
-    expect(result).toEqual(order);
-  });
-
   it("should have a addProduct method", () => {
     expect(store.addProduct).toBeDefined();
   });
   it("addProduct method should add the correct product to correct order", async () => {
-    const result = await store.addProduct(order,order_products,product);
+    const result = await store.addProduct(order, order_products, product);
     expect(result).toEqual(order_products);
   });
 
   it("should have a updateProduct method", () => {
+    expect(store.updateProduct).toBeDefined();
+  });
+  it("updateProduct method should update the correct order", async () => {
+    const result = await store.updateProduct(order_products);
+    expect(result).toEqual(order_products);
+  });
+
+  it("should have a delete method", () => {
     expect(store.delete).toBeDefined();
   });
-  it("updateProduct method should delete the correct order", async () => {
+  it("delete method should delete the correct order", async () => {
     const result = await store.delete(order.id);
     expect(result).toEqual(order);
   });

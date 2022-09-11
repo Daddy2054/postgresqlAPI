@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import express, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
   try {
