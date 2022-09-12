@@ -22,8 +22,8 @@ router
 router
   .route("/:id")
   .get(verifyAuthToken, show)
-  .post(verifyAuthToken, administrator, status)
-  .delete(verifyAuthToken, remove);
+  .put(verifyAuthToken, administrator, status)
+  .delete(verifyAuthToken, administrator, remove);
 router.route("/completed/:id").get(verifyAuthToken, completed);
 router.route("/current/:id").get(verifyAuthToken, current);
 export default router;
