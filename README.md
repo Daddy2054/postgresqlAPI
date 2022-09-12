@@ -16,6 +16,7 @@ $ cd postgresqlAPI
 !!! >>>  edit config files: database.json, .env, docker-compose.yml
 
 $ npm install
+$ yarn add bcypt
 $ db-migrate db:create full_stack
 $ db-migrate up
 $ npm run build
