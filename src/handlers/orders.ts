@@ -24,6 +24,18 @@ const show = async (req: Request, res: Response) => {
   }
 };
 
+const status = async (req: Request, res: Response) => {
+  try {
+    const status: Order = await store.status(
+      parseInt(req.params["id"]), req.body.status
+    );
+    res.json(status);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
 const current = async (req: Request, res: Response) => {
   try {
     const current: Order = await store.showCurrent(parseInt(req.params["id"]));
@@ -49,10 +61,14 @@ const add = async (req: Request, res: Response) => {
     id: req.body.product.id,
     name: req.body.product.name,
     price: req.body.product.price,
-    category: req.body.product.category
-  }
+    category: req.body.product.category,
+  };
   try {
-    const add: OrderProducts = await store.addProduct(order, order_products,product);
+    const add: OrderProducts = await store.addProduct(
+      order,
+      order_products,
+      product
+    );
     res.json(add);
   } catch (err) {
     res.status(400);
@@ -99,4 +115,4 @@ const remove = async (req: Request, res: Response) => {
     res.json(err);
   }
 };
-export { index, add, show, update, remove, completed, current };
+export { index, add, show, update, remove, completed, current,status };

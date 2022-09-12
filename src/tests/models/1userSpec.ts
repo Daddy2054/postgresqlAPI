@@ -1,7 +1,6 @@
 import { User, UserStore } from "../../models/user";
-import { crypt_hash, crypt_compare } from "../../utilities/crypt";
 
-const store = new UserStore();
+const userStore = new UserStore();
 const user: User = {
   id: 1,
   first_name: "first_name",
@@ -15,44 +14,45 @@ const password = "1234567890absdefgh";
 
 describe("User model testing suite:", () => {
   it("should have a create method", () => {
-    expect(store.create).toBeDefined();
+    expect(userStore.create).toBeDefined();
   });
   it("create method should add a user", async () => {
-    const result = await store.create(user);
+    const result = await userStore.create(user);
     user.password = result.password;
     expect(result).toEqual(user);
+    //console.log(result)
   });
 
   it("should have an index method", () => {
-    expect(store.index).toBeDefined();
+    expect(userStore.index).toBeDefined();
   });
   it("index method should return a list of users", async () => {
-    const result = await store.index();
+    const result = await userStore.index();
     expect(result).toEqual(users);
   });
 
   it("should have a show method", () => {
-    expect(store.show).toBeDefined();
+    expect(userStore.show).toBeDefined();
   });
   it("show method should return the correct user", async () => {
-    const result = await store.show(user.username);
+    const result = await userStore.show(user.username);
     expect(result).toEqual(user);
   });
 
   it("should have a login method", () => {
-    expect(store.login).toBeDefined();
+    expect(userStore.login).toBeDefined();
   });
   it("login method should login a user", async () => {
-    const result = await store.login(user.username, password);
+    const result = await userStore.login(user.username, password);
     expect(result).toEqual(user);
   });
 
   it("should have a makeAdmin method", () => {
-    expect(store.makeAdmin).toBeDefined();
+    expect(userStore.makeAdmin).toBeDefined();
   });
   it("makeAdmin method should update the correct user as admin", async () => {
     user.admin = true;
-    const result = await store.makeAdmin(user.username);
+    const result = await userStore.makeAdmin(user.username);
     user.admin = true;
     expect(result).toEqual(user);
   });

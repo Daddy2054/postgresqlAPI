@@ -68,6 +68,7 @@ export class ProductStore {
 
   async create(product: Product): Promise<Product> {
     try {
+      let values: Array<string | number>
       const sql =
         "\
       SELECT \
@@ -79,7 +80,7 @@ export class ProductStore {
       AND \
         price = ($2) \
       ";
-      const values = [product.name, product.price];
+      values = [product.name, product.price];
       const conn = await client.connect();
       let result = await conn.query(sql, values);
       if (!result.rows[0]) {
@@ -90,8 +91,8 @@ export class ProductStore {
         VALUES ($1, $2, $3) \
         RETURNING * \
         ";
-        const values2 = [product.name, product.price, product.category];
-        result = await conn.query(sql, values2);
+        values = [product.name, product.price, product.category];
+        result = await conn.query(sql, values);
       }
       conn.release();
       return result.rows[0];

@@ -12,7 +12,7 @@ export type User = {
 
 export class UserStore {
   async create(u: User): Promise<User> {
-    console.log("create method start");
+
     try {
       const sql =
         "INSERT INTO users (first_name, last_name, username, PASSWORD) \
@@ -54,7 +54,7 @@ export class UserStore {
   }
 
   async show(username: string): Promise<User> {
-    console.log("show method start");
+
     try {
       const sql =
         "SELECT \
@@ -66,7 +66,7 @@ export class UserStore {
   ";
       const conn = await client.connect();
       const result = await conn.query(sql, [username]);
-      console.log("result:" + result);
+
       conn.release();
       return result.rows[0];
     } catch (err) {

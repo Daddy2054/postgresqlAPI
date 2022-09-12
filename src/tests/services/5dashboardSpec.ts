@@ -25,7 +25,7 @@ const store = new OrderStore();
 const PrStore = new ProductStore();
 const dashboard = new DashboardQueries();
 
-beforeAll(() => {
+/*beforeAll(() => {
   store.addProduct(
     order as Order,
     order_products as OrderProducts,
@@ -41,7 +41,7 @@ afterAll(() => {
   store.delete(order_products.order_id)
   PrStore.delete(order_products.product_id)
 });
-
+*/
 describe("Dashboard queries testing suite", () => {
   it("should have a productsInOrders method", () => {
     expect(dashboard.productsInOrders).toBeDefined();

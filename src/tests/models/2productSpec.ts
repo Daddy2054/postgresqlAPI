@@ -1,6 +1,6 @@
 import { Product, ProductStore } from "../../models/product";
 
-const store = new ProductStore();
+const productStore = new ProductStore();
 const product: Product = {
   id: 1,
   name: "product_name",
@@ -13,43 +13,37 @@ const products: Product[] = [product];
 describe("Product model testing suite:", () => {
  
   it("should have a create method", () => {
-    expect(store.create).toBeDefined();
+    expect(productStore.create).toBeDefined();
   });
   it("create method should add a product", async () => {
-    const result = await store.create(product);
+    const result = await productStore.create(product);
     expect(result).toEqual(product);
   });
  
   it("should have an index method", () => {
-    expect(store.index).toBeDefined();
+    expect(productStore.index).toBeDefined();
   });
   it("index method should return a list of products", async () => {
-    const result = await store.index();
+    const result = await productStore.index();
     expect(result).toEqual(products);
   });
 
   it("should have a show method", () => {
-    expect(store.show).toBeDefined();
+    expect(productStore.show).toBeDefined();
   });
   it("show method should return the correct product", async () => {
-    const result = await store.show(product.id);
+    const result = await productStore.show(product.id);
     expect(result).toEqual(product);
   });
 
   it("should have a productsByCategory method", () => {
-    expect(store.productsByCategory).toBeDefined();
+    expect(productStore.productsByCategory).toBeDefined();
   });
   it("productsByCategory method should return the correct products", async () => {
-    const result = await store.productsByCategory(product.category);
+    const result = await productStore.productsByCategory(product.category);
     expect(result).toEqual(products);
   });
 
-  xit("should have a delete method", () => {
-    expect(store.delete).toBeDefined();
-  });
-  xit("delete method should delete the correct product", async () => {
-    const result = await store.delete(product.id);
-    expect(result).toEqual(product);
-  });
+
 
 });

@@ -13,7 +13,6 @@ export type OrderProducts = {
 };
 
 export class OrderStore {
-
   async index(): Promise<Order[]> {
     try {
       const sql =
@@ -52,10 +51,32 @@ export class OrderStore {
     }
   }
 
+  async status(id: number, status: string): Promise<Order> {
+    try {
+      const sql =
+        "\
+      UPDATE \
+        orders \
+      SET \
+        status = ($2) \
+      WHERE \
+        id=($1) \
+        RETURNING * \
+      ";
+      const conn = await client.connect();
+      const result = await conn.query(sql, [id, status]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Could not set status ${status} for order by ID:${id}. Error: ${err}`);
+    }
+  }
+
   // select Current Order by user (args: user id)[token required]
   async showCurrent(user_id: number): Promise<Order> {
     try {
-      const sql = "SELECT * FROM Orders WHERE user_id=($1)";
+      const sql =
+        "SELECT * FROM Orders WHERE user_id=($1) AND status=('open');";
       const conn = await client.connect();
       const result = await conn.query(sql, [user_id]);
       conn.release();
@@ -72,7 +93,7 @@ export class OrderStore {
     order_products: OrderProducts,
     product: Product
   ): Promise<OrderProducts> {
-    const newOrder: Order = await this.create(order as Order);
+    const newOrder: Order = await this.create1(order as Order);
     const productStore: ProductStore = new ProductStore();
     const newProduct: Product = await productStore.create(product as Product);
     try {
@@ -98,7 +119,8 @@ export class OrderStore {
 
   async updateProduct(order_products: OrderProducts): Promise<OrderProducts> {
     try {
-      let sql;
+      let sql: string;
+      let values: Array<number>;
       if (order_products.quantity === 0) {
         sql =
           " \
@@ -109,6 +131,7 @@ export class OrderStore {
           AND \
             product_id=($2) \
           RETURNING *; ";
+        values = [order_products.order_id, order_products.product_id];
       } else {
         sql =
           "\
@@ -121,13 +144,14 @@ export class OrderStore {
           AND \
             product_id=($2) \
           RETURNING *; ";
+        values = [
+          order_products.order_id,
+          order_products.product_id,
+          order_products.quantity,
+        ];
       }
       const conn = await client.connect();
-      const result = await conn.query(sql, [
-        order_products.order_id,
-        order_products.product_id,
-        order_products.quantity,
-      ]);
+      const result = await conn.query(sql, values);
       conn.release();
       return result.rows[0];
     } catch (err) {
@@ -161,7 +185,7 @@ export class OrderStore {
     }
   }
 
-  async create(order: Order): Promise<Order> {
+  async create1(order: Order): Promise<Order> {
     try {
       const sql =
         "\
@@ -179,11 +203,12 @@ export class OrderStore {
         const sql =
           "\
         INSERT INTO \
-          orders (status) \
-        VALUES ('open') \
+          orders \
+        (user_id) \
+        VALUES ( $1) \
           RETURNING * \
         ";
-        result = await conn.query(sql);
+        result = await conn.query(sql, [order.user_id]);
       }
       conn.release();
       return result.rows[0];
