@@ -76,7 +76,16 @@ export class OrderStore {
   async showCurrent(user_id: number): Promise<Order> {
     try {
       const sql =
-        "SELECT * FROM Orders WHERE user_id=($1) AND status=('open');";
+        " \
+      SELECT \
+        * \
+      FROM \
+        orders \
+      WHERE \
+        user_id=($1) \
+      AND \
+        status=('open');  \
+        ";
       const conn = await client.connect();
       const result = await conn.query(sql, [user_id]);
       conn.release();

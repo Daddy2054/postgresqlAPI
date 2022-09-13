@@ -1,13 +1,10 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
-//import * as dotenv from "dotenv";
 
 import userRoutes from "./routes/userRoutes";
 import productRoutes from "./routes/productRoutes";
 import orderRoutes from "./routes/orderRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
-
-//dotenv.config();
 
 const app: express.Application = express();
 const address: string = "0.0.0.0:3000";

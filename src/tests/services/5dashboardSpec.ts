@@ -25,37 +25,32 @@ const store = new OrderStore();
 const PrStore = new ProductStore();
 const dashboard = new DashboardQueries();
 
-/*beforeAll(() => {
-  store.addProduct(
-    order as Order,
-    order_products as OrderProducts,
-    product as Product
-  );
-});
-
-afterAll(() => {
-  order_products.quantity = 0
-  store.updateProduct(
-    order_products as OrderProducts,
-  );
-  store.delete(order_products.order_id)
-  PrStore.delete(order_products.product_id)
-});
-*/
 describe("Dashboard queries testing suite", () => {
   it("should have a productsInOrders method", () => {
     expect(dashboard.productsInOrders).toBeDefined();
   });
   it("productsInOrders method should return an product", async () => {
-    const result = await dashboard.productsInOrders();
-    expect(result).toEqual(products);
+    try {
+      const result = await dashboard.productsInOrders();
+      expect(result).toEqual(products);
+    } catch (error) {
+      throw new Error(
+        `Could not test productsInOrders method. Error: ${error}`
+      );
+    }
   });
 
   it("should have an fiveMostExpensiveProducts method", () => {
     expect(dashboard.fiveMostExpensiveProducts).toBeDefined();
   });
-  it("index method should return a list of five Most Expensive Products", async () => {
-    const result = await dashboard.fiveMostExpensiveProducts();
-    expect(result).toEqual(products);
+  it("fiveMostExpensiveProducts method should return a list of five Most Expensive Products", async () => {
+    try {
+      const result = await dashboard.fiveMostExpensiveProducts();
+      expect(result).toEqual(products);
+    } catch (error) {
+      throw new Error(
+        `Could not test fiveMostExpensiveProducts method. Error: ${error}`
+      );
+    }
   });
 });

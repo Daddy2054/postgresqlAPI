@@ -12,7 +12,6 @@ export type User = {
 
 export class UserStore {
   async create(u: User): Promise<User> {
-
     try {
       const sql =
         "INSERT INTO users (first_name, last_name, username, PASSWORD) \
@@ -32,8 +31,9 @@ export class UserStore {
   }
 
   async login(username: string, password: string): Promise<User | null> {
-    const sql =
-      "\
+    try {
+      const sql =
+        "\
       SELECT \
       * \
       FROM \
@@ -41,20 +41,22 @@ export class UserStore {
       WHERE \
     username = ($1) \
 ";
-    const conn = await client.connect();
-    const result = await conn.query(sql, [username]);
-    conn.release();
-    if (result.rows.length) {
-      const user = result.rows[0];
-      if (crypt_compare(password as string, user.password as string)) {
-        return user;
+      const conn = await client.connect();
+      const result = await conn.query(sql, [username]);
+      conn.release();
+      if (result.rows.length) {
+        const user = result.rows[0];
+        if (crypt_compare(password as string, user.password as string)) {
+          return user;
+        }
       }
+      return null;
+    } catch (error) {
+      throw new Error(`Could not login user method. Error: ${error}`);
     }
-    return null;
   }
 
   async show(username: string): Promise<User> {
-
     try {
       const sql =
         "SELECT \
@@ -66,7 +68,6 @@ export class UserStore {
   ";
       const conn = await client.connect();
       const result = await conn.query(sql, [username]);
-
       conn.release();
       return result.rows[0];
     } catch (err) {

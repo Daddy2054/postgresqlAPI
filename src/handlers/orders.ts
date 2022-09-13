@@ -27,7 +27,8 @@ const show = async (req: Request, res: Response) => {
 const status = async (req: Request, res: Response) => {
   try {
     const status: Order = await store.status(
-      parseInt(req.params["id"]), req.body.status
+      parseInt(req.params["id"]),
+      req.body.status
     );
     res.json(status);
   } catch (err) {
@@ -47,23 +48,23 @@ const current = async (req: Request, res: Response) => {
 };
 
 const add = async (req: Request, res: Response) => {
-  const order: Order = {
-    id: req.body.order.order_id,
-    status: req.body.order.status,
-    user_id: req.body.order.user_id,
-  };
-  const order_products: OrderProducts = {
-    quantity: req.body.order_products.quantity,
-    order_id: req.body.order_products.order_id,
-    product_id: req.body.order_products.product_id,
-  };
-  const product: Product = {
-    id: req.body.product.id,
-    name: req.body.product.name,
-    price: req.body.product.price,
-    category: req.body.product.category,
-  };
   try {
+    const order: Order = {
+      id: req.body.order.order_id,
+      status: req.body.order.status,
+      user_id: req.body.order.user_id,
+    };
+    const order_products: OrderProducts = {
+      quantity: req.body.order_products.quantity,
+      order_id: req.body.order_products.order_id,
+      product_id: req.body.order_products.product_id,
+    };
+    const product: Product = {
+      id: req.body.product.id,
+      name: req.body.product.name,
+      price: req.body.product.price,
+      category: req.body.product.category,
+    };
     const add: OrderProducts = await store.addProduct(
       order,
       order_products,
@@ -77,12 +78,12 @@ const add = async (req: Request, res: Response) => {
 };
 
 const completed = async (req: Request, res: Response) => {
-  const order: Order = {
-    id: 0,
-    status: "",
-    user_id: req.body.user_id,
-  };
   try {
+    const order: Order = {
+      id: 0,
+      status: "",
+      user_id: req.body.user_id,
+    };
     const completed: Order[] = await store.completedByUser(order.user_id);
     res.json(completed);
   } catch (err) {
@@ -92,12 +93,12 @@ const completed = async (req: Request, res: Response) => {
 };
 
 const update = async (req: Request, res: Response) => {
-  const order_products: OrderProducts = {
-    quantity: req.body.quantity,
-    order_id: req.body.order_id,
-    product_id: req.body.product_id,
-  };
   try {
+    const order_products: OrderProducts = {
+      quantity: req.body.quantity,
+      order_id: req.body.order_id,
+      product_id: req.body.product_id,
+    };
     const update: OrderProducts = await store.updateProduct(order_products);
     res.json(update);
   } catch (err) {
@@ -115,4 +116,4 @@ const remove = async (req: Request, res: Response) => {
     res.json(err);
   }
 };
-export { index, add, show, update, remove, completed, current,status };
+export { index, add, show, update, remove, completed, current, status };

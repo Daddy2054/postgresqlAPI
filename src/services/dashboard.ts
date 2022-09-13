@@ -45,6 +45,4 @@ export class DashboardQueries {
     }
   }
 }
-function addProduct(order: any, order_products: any, product: any) {
-  throw new Error("Function not implemented.");
-}
+

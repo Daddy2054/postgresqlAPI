@@ -38,13 +38,13 @@ const category = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const product: Product = {
-    id: req.body.id,
-    name: req.body.name,
-    price: req.body.price,
-    category: req.body.category,
-  };
   try {
+    const product: Product = {
+      id: req.body.id,
+      name: req.body.name,
+      price: req.body.price,
+      category: req.body.category,
+    };
     const create: Product = await store.create(product);
     res.json(create);
   } catch (err) {
